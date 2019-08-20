@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using vega.Persistence;
 
 namespace vega.Migrations
 {
     [DbContext(typeof(VegaDbContext))]
-    partial class VegaDbContextModelSnapshot : ModelSnapshot
+    [Migration("20190820155255_AddVehicle")]
+    partial class AddVehicle
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -98,7 +100,7 @@ namespace vega.Migrations
                     b.ToTable("Vehicles");
                 });
 
-            modelBuilder.Entity("vega.Models.VehicleFeature", b =>
+            modelBuilder.Entity("vega.Models.VehicleFeatures", b =>
                 {
                     b.Property<int>("VehicleId");
 
@@ -108,7 +110,7 @@ namespace vega.Migrations
 
                     b.HasIndex("FeatureId");
 
-                    b.ToTable("VehicleFeature");
+                    b.ToTable("VehicleFeatures");
                 });
 
             modelBuilder.Entity("vega.Models.Model", b =>
@@ -127,7 +129,7 @@ namespace vega.Migrations
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 
-            modelBuilder.Entity("vega.Models.VehicleFeature", b =>
+            modelBuilder.Entity("vega.Models.VehicleFeatures", b =>
                 {
                     b.HasOne("vega.Models.Feature", "Feature")
                         .WithMany()
