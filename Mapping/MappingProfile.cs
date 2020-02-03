@@ -11,15 +11,21 @@ namespace vega.Mapping
         public MappingProfile()
         {
             //Domain to API Resources
-            CreateMap<Make, MakesResources>();
-            CreateMap<Model, ModelResorces>();
-            CreateMap<Feature, FeatureResources>();
+            CreateMap<Make, MakeResource>();
+            CreateMap<Make, KeyValuePairResource>();
+            CreateMap<Model, KeyValuePairResource>();
+            CreateMap<Feature, KeyValuePairResource>();
+            CreateMap<Vehicle, SaveVehicleResources>()
+                .ForMember(vr => vr.Contact, opt => opt.MapFrom(v => new ContactResource { Name = v.ContactName, Email = v.ContactEmail, Phone = v.ContactPhone }))
+                .ForMember(vr => vr.Features, opt => opt.MapFrom(v => v.Features.Select(vf => vf.FeatureId)));
+
             CreateMap<Vehicle, VehicleResources>()
-            .ForMember(vr => vr.Contact, opt => opt.MapFrom(v => new ContactResource { Name = v.ContactName, Email = v.ContactEmail, Phone = v.ContactPhone }))
-            .ForMember(vr => vr.Features, opt => opt.MapFrom(v => v.Features.Select(vf => vf.FeatureId)));
+                .ForMember(vr => vr.Make, opt => opt.MapFrom(v => v.Model.Make))
+                .ForMember(vr => vr.Contact, opt => opt.MapFrom(v => new ContactResource { Name = v.ContactName, Email = v.ContactEmail, Phone = v.ContactPhone }))
+                .ForMember(vr => vr.Features, opt => opt.MapFrom(v => v.Features.Select(vf => new KeyValuePairResource { Id = vf.Feature.Id, Name = vf.Feature.Name })));
 
             //API Resources to Domain
-            CreateMap<VehicleResources, Vehicle>()
+            CreateMap<SaveVehicleResources, Vehicle>()
                 .ForMember(v => v.Id, opt => opt.Ignore())
                 .ForMember(v => v.ContactName, opt => opt.MapFrom(vr => vr.Contact.Name))
                 .ForMember(v => v.ContactEmail, opt => opt.MapFrom(vr => vr.Contact.Email))

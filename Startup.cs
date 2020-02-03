@@ -24,6 +24,11 @@ namespace vega
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            //Mapping Repository
+            services.AddScoped<IVehicleRepository, VehicleRepository>();
+            services.AddScoped<IFeatureRepository, FeatureRepository>();
+            services.AddScoped<IUnitOfWork, UnitOfWork>();
+
             //Mapping Config
             var mappingConfig = new MapperConfiguration(mc => { mc.AddProfile(new MappingProfile()); });
             IMapper mapper = mappingConfig.CreateMapper();
